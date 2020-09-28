@@ -16,28 +16,42 @@ const products = [
         price:700,
     },
 ];
-
+//GET
 app.get('/products', (req, res) => res.json(products));
+//GET
+
+//POST
 app.post('/products', (req, res) => {
     products.push(req.body);
     res.json(req.body);
 });
+//POST
+
+//PUT
 app.put('/products/:id', (req,res)=>{
     let product = products.find(m => m.id === +req.params.id);
     let productIndex = products.indexOf(product);
-    let newProduct = {...product, ...req.body}
+    let newProduct = {...product, ...req.body};
     products[productIndex] = newProduct;
     res.json(newProduct)
-})
+});
+//PUT
+
+//DELETE
 app.delete('/products/:id', (req,res)=>{
-    products.splice(                                             // удаляем один элемент с заданным индексом
-        products.indexOf(                                        // находим индекс элемента
-            products.find(m => m.id === +req.params.id) //вычисляем первый элемент, у которого индекс соответствует индексу из URL
+    // удаляем один элемент с заданным индексом
+    products.splice(
+        // находим индекс элемента
+        products.indexOf(
+            //вычисляем первый элемент, у которого индекс соответствует индексу из URL
+            products.find(m => m.id === +req.params.id)
         ),
         1
-    )
+    );
     res.json({success: true})
-})
+});
+//DELETE
+
 
 
 app.listen(3000,()=>console.log('Listening on port 3000...'));
