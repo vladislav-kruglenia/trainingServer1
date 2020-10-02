@@ -1,7 +1,8 @@
 const ObjectID = require('mongodb').ObjectID;
+const authMiddleware = require('./middlewares/authMiddleware');
 
 module.exports = (app, myDb) =>{
-    app.post('/products',(req, res) => {
+    app.post('/products', authMiddleware, (req, res) => {
         console.log('POST работает');
         let product = req.body;
         myDb.collection('products').insertOne(product, (err, result) => {
@@ -13,7 +14,7 @@ module.exports = (app, myDb) =>{
         })
     });
 
-    app.get('/products',(req, res) => {
+    app.get('/products', authMiddleware,(req, res) => {
         console.log('GET работает');
         myDb.collection('products').find().toArray((err, docs) => {
             if (err) {
@@ -27,7 +28,7 @@ module.exports = (app, myDb) =>{
 
 
 
-    app.put('/products/:id', (req, res) => {
+    app.put('/products/:id', authMiddleware, (req, res) => {
         console.log('PUT работает');
         myDb.collection('products').updateOne(
             {_id: ObjectID(req.params.id)},
@@ -42,7 +43,7 @@ module.exports = (app, myDb) =>{
             })
     });
 
-    app.delete('/products/:id', (req, res) => {
+    app.delete('/products/:id', authMiddleware, (req, res) => {
         console.log('DELETE работает');
         myDb.collection('products').deleteOne(
             {_id: ObjectID(req.params.id)},
